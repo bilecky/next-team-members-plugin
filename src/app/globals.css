@@ -1,13 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-:root {
-  --background: #fcfcfc;
-  --foreground: #171717;
-}
 
 @layer utilities {
-  .background-mesh-generated-mobile {
+  .background-mesh-generated-hero {
     background-color: var(--background);
     background-image: radial-gradient(
         at 100% 64%,
@@ -16,15 +12,21 @@
       ),
       radial-gradient(at 0% 0%, rgb(139, 92, 246) 0, transparent 38%);
   }
-
-  .background-mesh-generated {
-    background-color: rgb(255, 255, 255);
+  .background-mesh-generated-overview {
+    background-color: var(--background);
     background-image: radial-gradient(
-        at 100% 50%,
-        rgb(139, 92, 246) 0,
-        transparent 40%
-      ),
-      radial-gradient(at 0% 0%, rgb(139, 92, 246) 0, transparent 34%);
+      at 0% 47%,
+      rgb(139, 92, 246) 0,
+      transparent 48%
+    );
+  }
+  .background-mesh-generated-buy {
+    background-color: var(--background);
+    background-image: radial-gradient(
+      at 50% 50%,
+      rgb(139, 92, 246) 0,
+      transparent 70%
+    );
   }
 
   .box-shadow-main-img {
@@ -42,4 +44,10 @@ h1,
 h2,
 h3 {
   font-family: var(--font-quicksand);
+}
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
 }
