@@ -1,21 +1,45 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 :root {
-  --background: #ffffff;
+  --background: #fcfcfc;
   --foreground: #171717;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer utilities {
+  .background-mesh-generated-mobile {
+    background-color: var(--background);
+    background-image: radial-gradient(
+        at 100% 64%,
+        rgb(139, 92, 246) 0,
+        transparent 36%
+      ),
+      radial-gradient(at 0% 0%, rgb(139, 92, 246) 0, transparent 38%);
+  }
+
+  .background-mesh-generated {
+    background-color: rgb(255, 255, 255);
+    background-image: radial-gradient(
+        at 100% 50%,
+        rgb(139, 92, 246) 0,
+        transparent 40%
+      ),
+      radial-gradient(at 0% 0%, rgb(139, 92, 246) 0, transparent 34%);
+  }
+
+  .box-shadow-main-img {
+    box-shadow:
+      rgba(0, 0, 0, 0.25) 0px 14px 28px,
+      rgba(0, 0, 0, 0.22) 0px 10px 10px;
   }
 }
-
+/* W pliku global.css lub innym pliku stylów */
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-mavenPro);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-quicksand);
 }
