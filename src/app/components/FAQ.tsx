@@ -11,7 +11,7 @@ const FAQ = (props: Props) => {
   return (
     <section>
       {" "}
-      <div className="section_wrapper container relative z-10 flex w-full flex-col items-center py-20 text-center">
+      <div className="section_wrapper container relative z-10 flex w-full flex-col items-center pb-20 pt-0 text-center lg:py-20">
         <div className="text_wrapper">
           <h2 className="px-12 text-5xl font-semibold lg:text-6xl">
             Najczęściej zadawane
@@ -108,8 +108,8 @@ const FAQ = (props: Props) => {
                 Czy mogę dostosować kolor czcionek i tła?
               </AccordionTrigger>
               <AccordionContent>
-                Tak, możesz dostosować kolor czcionek i tła w ustawieniach
-                bloku, aby dopasować je do wyglądu Twojej strony.
+                Tak, możesz dostosować kolor czcionek natomiast tło pluginu
+                zostanie odziedziczone od tła Twojej strony.
               </AccordionContent>
             </AccordionItem>
 

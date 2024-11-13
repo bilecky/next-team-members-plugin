@@ -6,7 +6,7 @@ type Props = {};
 const Overview = (props: Props) => {
   return (
     <section className="background-mesh-generated-overview">
-      <div className="section_wrapper container relative z-10 flex w-full flex-col items-center py-20 text-center">
+      <div className="section_wrapper container relative z-10 flex w-full flex-col items-center text-center lg:py-20">
         <div className="text_wrapper">
           <h2 className="px-12 text-5xl font-semibold lg:text-6xl">
             Szybkie{" "}
@@ -92,9 +92,11 @@ const Overview = (props: Props) => {
                 Przejdź do edytora blokowego WordPress, aby dodać blok „Team
                 Members Block” bezpośrednio na stronę. To tutaj możesz łatwo
                 dostosować rozmiar i kolor czcionek, a także wybrać filtry do
-                zdjęć, aby spersonalizować wygląd sekcji zespołu. Otrzymujesz
-                podgląd na żywo, dzięki czemu możesz precyzyjnie dostosować
-                wizualizację profili, osiągając spójny i atrakcyjny efekt.
+                zdjęć, aby spersonalizować wygląd sekcji zespołu (menu edycji
+                bloku znajdziesz po prawej stronie edytora WordPressa). Podczas
+                modyfikacji otrzymujesz podgląd na żywo, dzięki czemu możesz
+                precyzyjnie dostosować wizualizację profili, osiągając spójny i
+                atrakcyjny efekt.
               </p>
             </div>
             <div className="image-wrapper lg:w-3/5">

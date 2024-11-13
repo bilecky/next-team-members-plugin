@@ -17,7 +17,7 @@ export default function Home() {
         <Buy />
         <FAQ />
       </main>
-      <footer className="font-quicksand container flex justify-between border-t px-0 py-3">
+      <footer className="font-quicksand container flex justify-between border-t px-2 py-3">
         <p className="">© {year} Team Members Plugin</p>
         <p>
           by{" "}

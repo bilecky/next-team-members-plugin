@@ -6,7 +6,7 @@ type Props = {};
 const Hero = (props: Props) => {
   return (
     <section className="background-mesh-generated-hero">
-      <div className="section_wrapper container relative z-10 flex w-full flex-col items-center py-36 text-center">
+      <div className="section_wrapper container relative z-10 flex w-full flex-col items-center pb-32 pt-56 text-center">
         <div className="text_wrapper">
           <h2 className="px-12 text-5xl font-semibold lg:text-8xl">
             Zaprezentuj{" "}

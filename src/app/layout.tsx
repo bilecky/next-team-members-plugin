@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 
 import { Quicksand, Maven_Pro } from "next/font/google";
+import Header from "./components/Header";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -31,6 +32,7 @@ export default function RootLayout({
       <body
         className={`bg-primary antialiased ${quicksand.variable} ${mavenPro.variable} relative h-[350vh]`}
       >
+        <Header />
         {children}
       </body>
     </html>
