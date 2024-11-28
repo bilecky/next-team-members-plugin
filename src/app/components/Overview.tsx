@@ -58,7 +58,7 @@ const Overview = (props: Props) => {
                 <span className="text-primary-DEFAULT_PURPLE_FONT_COLOR font-bold">
                   #2
                 </span>{" "}
-                Dodaj Członka Zespołu i Personalizuj Szczegóły{" "}
+                Dodaj członka zespołu i personalizuj szczegóły{" "}
               </h2>
               <p className="text-sm">
                 Tworzenie profili członków zespołu jest dziecinnie proste!
@@ -86,7 +86,7 @@ const Overview = (props: Props) => {
                 <span className="text-primary-DEFAULT_PURPLE_FONT_COLOR font-bold">
                   #3
                 </span>{" "}
-                Dodaj Blok Team Members w Edytorze i Dostosuj Wygląd{" "}
+                Dodaj blok Team Members w edytorze i dostosuj wygląd{" "}
               </h2>
               <p className="text-sm">
                 Przejdź do edytora blokowego WordPress, aby dodać blok „Team

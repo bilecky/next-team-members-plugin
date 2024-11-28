@@ -48,6 +48,7 @@ const Features = (props: Props) => {
             </div>
             <div className="image-section mx-auto">
               <Image
+                quality={100}
                 width={650}
                 height={500}
                 src="/plugin-images/wtyczka-members-4.png"

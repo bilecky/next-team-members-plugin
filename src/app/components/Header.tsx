@@ -5,7 +5,7 @@ type Props = {};
 
 const Header = (props: Props) => {
   return (
-    <header className="container fixed left-0 right-0 z-50 mx-auto my-6 w-full">
+    <header className="container fixed left-0 right-0 z-50 my-6 w-full">
       <div className="header-glassmorphism flex items-center justify-between rounded-xl px-4 py-3">
         <div className="logo flex items-center gap-x-1 text-lg">
           <Image

@@ -21,14 +21,15 @@ const Hero = (props: Props) => {
             non-profit i innych instytucji, umożliwia łatwą integrację z każdą
             stroną Wordpress.
           </p>
-          <button className="bg-primary-DEFAULT_PURPLE_BG hover:bg-primary-DARKENED_PURPLE_BG mb-14 rounded-xl px-8 py-3 font-normal tracking-wide text-white transition duration-300">
+          <button className="mb-14 rounded-xl bg-primary-DEFAULT_PURPLE_BG px-8 py-3 font-normal tracking-wide text-white transition duration-300 hover:bg-primary-DARKENED_PURPLE_BG">
             Dowiedz się więcej
           </button>
         </div>
         <div className="">
           <Image
-            width={1280}
-            height={784}
+            quality={100}
+            width={1180}
+            height={684}
             src="/plugin-images/wtyczka-members-mockup.png"
             alt="hero "
             className="box-shadow-main-img rounded-xl"

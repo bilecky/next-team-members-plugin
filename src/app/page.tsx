@@ -4,7 +4,7 @@ import Features from "./components/Features";
 import Hero from "./components/Hero";
 import Overview from "./components/Overview";
 
-export default function Home() {
+export default async function Home() {
   const newDate = new Date();
   const year = newDate.getFullYear();
 
@@ -17,7 +17,7 @@ export default function Home() {
         <Buy />
         <FAQ />
       </main>
-      <footer className="font-quicksand container flex justify-between border-t px-2 py-3">
+      <footer className="container flex justify-between border-t px-2 py-3 font-quicksand">
         <p className="">© {year} Team Members Plugin</p>
         <p>
           by{" "}
