@@ -55,8 +55,9 @@ export async function signup(formData: FormData) {
     switch (error.code) {
       case "user_already_exists":
         return "Użytkownik o podanym adresie e-mail już istnieje.";
+      default:
+        return error.message;
     }
-    return error.message;
   }
   revalidatePath("/", "layout");
   redirect("/");
