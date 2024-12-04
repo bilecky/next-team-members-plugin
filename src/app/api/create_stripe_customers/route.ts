@@ -25,10 +25,10 @@ export async function POST(req: NextRequest) {
 
   try {
     // Parsowanie danych z żądania
-    const { email, id } = await req.json();
+    const response = await req.json();
 
     // Walidacja danych wejściowych
-    if (!email) {
+    if (!response.record.email) {
       return NextResponse.json(
         { error: "Email jest wymagany" },
         { status: 400 },
@@ -36,7 +36,9 @@ export async function POST(req: NextRequest) {
     }
 
     // Tworzenie nowego klienta Stripe
-    const customer = await stripe.customers.create({ email: email });
+    const customer = await stripe.customers.create({
+      email: response.record.email,
+    });
 
     // Zapisywanie identyfikatora klienta w bazie danych
     await supabase
@@ -44,7 +46,7 @@ export async function POST(req: NextRequest) {
       .update({
         stripe_customer: customer.id,
       })
-      .eq("id", id);
+      .eq("id", response.record.id);
 
     // Zwracanie identyfikatora nowego klienta
     return NextResponse.json(
