@@ -1,11 +1,10 @@
-"use client";
-
+import { getYear } from "@/lib/utils";
 import React from "react";
 
 type Props = {};
 
 const Footer = (props: Props) => {
-  const year = new Date().getFullYear();
+  const year = getYear();
 
   return (
     <footer className="container flex justify-between border-t px-2 py-3 font-quicksand">
