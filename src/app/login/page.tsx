@@ -13,17 +13,6 @@ function signupUser(previousState: string | null, formData: FormData) {
 }
 
 export default function LoginPage() {
-  const supabase = createClient();
-  useEffect(() => {
-    const getUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      console.log("Current user:", user);
-    };
-
-    getUser();
-  }, []);
   const [loginState, loginAction] = useActionState(loginUser, null);
   const [signupState, signupAction] = useActionState(signupUser, null);
   return (

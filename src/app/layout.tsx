@@ -3,6 +3,8 @@ import "./globals.css";
 
 import { Quicksand, Maven_Pro } from "next/font/google";
 import Header from "./components/Header";
+import Provider from "./context";
+import Footer from "./components/Footer";
 
 export const metadata: Metadata = {
   title: "Team Members Plugin",
@@ -31,8 +33,11 @@ export default function RootLayout({
       <body
         className={`bg-primary antialiased ${quicksand.variable} ${mavenPro.variable} relative`}
       >
-        <Header />
-        {children}
+        <Provider>
+          <Header />
+          {children}
+        </Provider>
+        <Footer />
       </body>
     </html>
   );
