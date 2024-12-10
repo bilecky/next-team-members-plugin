@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useUser } from "../context";
 import { loadStripe } from "@stripe/stripe-js";
 import { useRouter } from "next/navigation";
+import { redirectToStripeCheckout } from "@/lib/utils";
 
 type Props = {};
 
@@ -20,23 +21,6 @@ const Buy = (props: Props) => {
   const userLoggedInAndSubscribted = !!user && user.is_subscribed;
   const userLoggedInAndNotSubscribed = !!user && !user.is_subscribed;
   //aded type in context to support is_subscribed
-
-  const processToCheckout = (plandId: any) => async () => {
-    const response = await fetch(`/api/subscription/${plandId}`, {
-      method: "POST", // Ustawienie poprawnej metody
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-
-      const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY!);
-
-      await stripe?.redirectToCheckout({ sessionId: data.id });
-    }
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -82,7 +66,7 @@ const Buy = (props: Props) => {
                   onClick={
                     userLoggedInAndSubscribted
                       ? () => router.push("/my-account")
-                      : processToCheckout(productPriceID)
+                      : () => redirectToStripeCheckout(productPriceID)
                   }
                   className="borde inline-block w-full rounded-xl border border-primary bg-primary px-6 py-3 text-xl font-semibold text-primary-DEFAULT_PURPLE_FONT_COLOR transition duration-300 hover:bg-transparent hover:text-primary"
                 >

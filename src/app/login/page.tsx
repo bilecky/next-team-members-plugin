@@ -6,6 +6,7 @@ import { createClient } from "@/utils/supabase/client";
 import { getProduct } from "@/lib/actions";
 import { loadStripe } from "@stripe/stripe-js";
 import { useUser } from "../context";
+import { redirectToStripeCheckout } from "@/lib/utils";
 
 function loginUser(previousState: string | null, formData: FormData) {
   return login(formData);
@@ -28,28 +29,8 @@ export default function LoginPage() {
       setProduct(product);
     };
     if (signupState === "success") {
-      const handleverifyAndGoToCheckout = async () => {
-        if (!productPriceID) {
-          console.error("Nie znaleziono produktu");
-          return;
-        }
-        const response = await fetch(`/api/subscription/${productPriceID}`, {
-          method: "POST", // Ustawienie poprawnej metody
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          console.log(data);
-          const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY!);
-          await stripe?.redirectToCheckout({ sessionId: data.id });
-        }
-      };
-
       setTimeout(() => {
-        handleverifyAndGoToCheckout();
+        redirectToStripeCheckout(productPriceID);
       }, 4000);
     }
 
