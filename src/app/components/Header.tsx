@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -28,13 +30,13 @@ const Header = (props: Props) => {
         </Link>
         <nav className="hidden items-center justify-center space-x-8 text-lg md:flex">
           <a
-            href="#features"
+            href="/#features"
             className="transition duration-300 hover:bg-primary hover:text-primary-DEFAULT_PURPLE_FONT_COLOR"
           >
             Funkcje
           </a>
           <a
-            href="#faq"
+            href="/#faq"
             className="transition duration-300 hover:bg-primary hover:text-primary-DEFAULT_PURPLE_FONT_COLOR"
           >
             FAQ
@@ -49,12 +51,12 @@ const Header = (props: Props) => {
               </span>{" "}
             </div>
           </Link>
-          <a
-            href="/zakup"
+          <Link
+            href="/login"
             className="inline-block rounded-xl border border-primary-DEFAULT_PURPLE_BG bg-primary-DEFAULT_PURPLE_BG px-6 py-3 text-xl font-semibold text-primary transition duration-300 hover:bg-primary hover:text-primary-DEFAULT_PURPLE_FONT_COLOR"
           >
             Kup
-          </a>
+          </Link>
         </nav>
         <div className="flex items-center justify-center gap-4 md:hidden">
           <Link href="/my-account">
@@ -64,12 +66,12 @@ const Header = (props: Props) => {
               </span>
             </div>
           </Link>
-          <a
-            href="/zakup"
+          <Link
+            href="/login"
             className="inline-block rounded-xl bg-primary-DEFAULT_PURPLE_BG px-6 py-3 text-xl font-semibold text-primary transition duration-300 hover:bg-primary hover:text-primary-DEFAULT_PURPLE_FONT_COLOR"
           >
             Kup
-          </a>
+          </Link>
         </div>
       </div>
     </header>

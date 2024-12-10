@@ -38,13 +38,21 @@ export default function LoginPage() {
   }, [signupState]);
 
   return (
-    <div className="flex h-screen w-full items-center justify-center">
+    <div className="flex h-screen w-full flex-col items-center justify-center">
+      <div className="info p-10 text-center text-sm md:w-2/3 lg:w-1/3">
+        <p>
+          Jeśli masz już konto, zaloguj się do panelu, gdzie będziesz mógł
+          pobrać plugin. Jeśli nie masz jeszcze konta, zarejestruj się, a
+          przekierujemy Cię do systemu płatności. Po zakupie będziesz mógł
+          pobrać plugin w panelu - "Moje konto".
+        </p>
+      </div>
       <form className="flex flex-col gap-4 rounded-xl bg-white px-10 py-10 shadow-xl">
         <label className="text-md font-normal" htmlFor="email">
           Email:
         </label>
         <input
-          className="rounded-xl bg-slate-100 p-2 focus:outline-none focus:ring-1 focus:ring-primary-DEFAULT_PURPLE_BG"
+          className="w-full rounded-xl bg-slate-100 p-2 focus:outline-none focus:ring-1 focus:ring-primary-DEFAULT_PURPLE_BG"
           id="email"
           name="email"
           type="email"

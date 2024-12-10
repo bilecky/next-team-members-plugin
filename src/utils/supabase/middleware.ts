@@ -37,10 +37,19 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  const checkIfSubscribed = await supabase
+    .from("profile")
+    .select("is_subscribed")
+    .eq("id", user?.id)
+    .single();
+
   if (request.nextUrl.pathname.startsWith("/my-account") && !user) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
   if (request.nextUrl.pathname.startsWith("/login") && user) {
+    return NextResponse.redirect(new URL("/my-account", request.url));
+  }
+  if (request.nextUrl.pathname.startsWith("/payment") && !checkIfSubscribed) {
     return NextResponse.redirect(new URL("/my-account", request.url));
   }
 

@@ -59,7 +59,7 @@ const page = (props: Props) => {
     <section className="background-mesh-generated-hero h-auto md:h-[110vh]">
       <div className="section_wrapper container relative z-10 flex h-full w-full rounded-xl pb-32 pt-56 text-center">
         <div className="inside_wrapper header-glassmorphism h-full w-full rounded-xl">
-          <h1 className="py-8 text-4xl font-semibold">Moje konto</h1>
+          <h2 className="py-8 text-4xl font-semibold">Moje konto</h2>
 
           <div className="sections_wrapper md:grid-rows-auto grid h-full w-full md:h-5/6 md:grid-cols-2">
             <div className="section_left flex h-full flex-col p-8 text-left">
@@ -87,10 +87,10 @@ const page = (props: Props) => {
 
               <ul className="py-4">
                 {userLoggedInAndNotSubscribed ? (
-                  <li className="py-1">
+                  <li className="py-1 text-center">
                     <button
                       onClick={() => redirectToStripeCheckout(productPriceID)}
-                      className="borde inline-block w-full rounded-xl border border-primary bg-primary px-6 py-3 text-xl font-semibold text-primary-DEFAULT_PURPLE_FONT_COLOR transition duration-300 hover:bg-transparent hover:text-primary"
+                      className="rounded-xl border border-primary-DEFAULT_PURPLE_BG bg-primary-DEFAULT_PURPLE_BG px-6 py-3 text-center text-xl font-semibold text-primary transition duration-300 hover:bg-primary hover:text-primary-DEFAULT_PURPLE_FONT_COLOR"
                     >
                       Kup teraz
                     </button>
@@ -109,7 +109,7 @@ const page = (props: Props) => {
               <div className="logout_wrapper flex h-full w-full items-end justify-end">
                 <button
                   onClick={handleLogout}
-                  className="text-md flex items-center justify-center rounded-xl border border-primary bg-primary px-6 py-3 font-semibold text-primary-DEFAULT_PURPLE_FONT_COLOR transition duration-300 hover:bg-primary-DARKENED_PURPLE_BG hover:text-primary md:text-xl"
+                  className="text-md flex items-center justify-center rounded-xl border bg-primary px-6 py-3 font-semibold text-primary-DEFAULT_PURPLE_BG transition duration-300 hover:bg-primary-DEFAULT_PURPLE_BG hover:text-primary md:text-xl"
                 >
                   <span className="mr-3">
                     <IoMdLogOut className="text-xl md:text-3xl" />
