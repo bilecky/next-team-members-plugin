@@ -15,9 +15,13 @@ const page = (props: Props) => {
   const [premiumContent, setPremiumContent] = useState<PremiumContent[] | null>(
     null,
   );
+
   const supabase = createClient();
   const { user } = useUser();
 
+  const userLoggedInAndNotSubscribed = !!user && !user.is_subscribed;
+
+  console.log(user);
   const getPremiumContent = async () => {
     const { data: premiumContent } = await supabase
       .from("premium_content")
