@@ -1,8 +1,11 @@
 "use client";
-import { useActionState, useEffect } from "react";
+import { FormEvent, use, useActionState, useEffect, useState } from "react";
 
 import { login, signup } from "./actions";
 import { createClient } from "@/utils/supabase/client";
+import { getProduct } from "@/lib/actions";
+import { loadStripe } from "@stripe/stripe-js";
+import { useUser } from "../context";
 
 function loginUser(previousState: string | null, formData: FormData) {
   return login(formData);
@@ -15,6 +18,44 @@ function signupUser(previousState: string | null, formData: FormData) {
 export default function LoginPage() {
   const [loginState, loginAction] = useActionState(loginUser, null);
   const [signupState, signupAction] = useActionState(signupUser, null);
+  const [product, setProduct] = useState<Record<string, any> | null>(null);
+
+  const productPriceID = product?.price.id;
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      const product = await getProduct();
+      setProduct(product);
+    };
+    if (signupState === "success") {
+      const handleverifyAndGoToCheckout = async () => {
+        if (!productPriceID) {
+          console.error("Nie znaleziono produktu");
+          return;
+        }
+        const response = await fetch(`/api/subscription/${productPriceID}`, {
+          method: "POST", // Ustawienie poprawnej metody
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data);
+          const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY!);
+          await stripe?.redirectToCheckout({ sessionId: data.id });
+        }
+      };
+
+      setTimeout(() => {
+        handleverifyAndGoToCheckout();
+      }, 4000);
+    }
+
+    fetchProduct();
+  }, [signupState]);
+
   return (
     <div className="flex h-screen w-full items-center justify-center">
       <form className="flex flex-col gap-4 rounded-xl bg-white px-10 py-10 shadow-xl">

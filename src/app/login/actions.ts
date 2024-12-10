@@ -59,6 +59,5 @@ export async function signup(formData: FormData) {
         return error.message;
     }
   }
-  revalidatePath("/", "layout");
-  redirect("/");
+  return "success";
 }

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import { createClient } from "@/utils/supabase/server";
+import { createAdminServerClient } from "@/utils/supabase/server";
 
 // Inicjalizacja Stripe poza handlerem, aby zachować singleton
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
       { status: 401 },
     );
   }
-  const supabase = await createClient();
+  const supabase = await createAdminServerClient();
 
   try {
     // Parsowanie danych z żądania

@@ -22,7 +22,6 @@ const page = (props: Props) => {
     const { data: premiumContent } = await supabase
       .from("premium_content")
       .select("*");
-    console.log(premiumContent);
     setPremiumContent(premiumContent);
   };
 
@@ -36,7 +35,7 @@ const page = (props: Props) => {
         <div className="inside_wrapper header-glassmorphism h-full w-full rounded-xl">
           <h1 className="py-8 text-4xl font-semibold">Moje konto</h1>
 
-          <div className="sections_wrapper grid h-full w-full grid-cols-2">
+          <div className="sections_wrapper grid h-full w-full md:grid-cols-2">
             <div className="section_left p-8 text-left">
               <div className="header-info flex items-center justify-center">
                 <h2 className="mr-4 whitespace-nowrap text-xl font-semibold">

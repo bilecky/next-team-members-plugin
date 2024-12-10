@@ -14,7 +14,7 @@ export const UserContext = createContext<{ user: extendedUser | null }>({
 const Provider = ({ children }: Readonly<{ children: React.ReactNode }>) => {
   const supabase = createClient();
 
-  const [user, setUser] = useState<extendedUser | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   useEffect(() => {
     const getUserProfile = async () => {
       const {

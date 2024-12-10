@@ -1,13 +1,15 @@
 "use client";
 import { getProduct } from "@/lib/actions";
 import React, { useEffect, useState } from "react";
-import { any } from "zod";
 import { useUser } from "../context";
 import { loadStripe } from "@stripe/stripe-js";
+import { useRouter } from "next/navigation";
 
 type Props = {};
 
 const Buy = (props: Props) => {
+  const router = useRouter();
+
   const { user } = useUser();
   const [product, setProduct] = useState<Record<string, any> | null>(null);
 
@@ -15,7 +17,9 @@ const Buy = (props: Props) => {
 
   const productPriceID = product?.price.id;
 
-  const showManageSubscription = !!user && user.is_subscribed;
+  const userLoggedInAndSubscribted = !!user && user.is_subscribed;
+  const userLoggedInAndNotSubscribed = !!user && !user.is_subscribed;
+  //aded type in context to support is_subscribed
 
   const processToCheckout = (plandId: any) => async () => {
     const response = await fetch(`/api/subscription/${plandId}`, {
@@ -27,7 +31,6 @@ const Buy = (props: Props) => {
 
     if (response.ok) {
       const data = await response.json();
-      console.log(data);
 
       const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY!);
 
@@ -63,7 +66,7 @@ const Buy = (props: Props) => {
             </div>
 
             <div className="pricing_wrapper grid w-full gap-y-10 rounded-xl bg-primary-DEFAULT_PURPLE_BG py-10">
-              {!showManageSubscription && (
+              {!userLoggedInAndSubscribted && (
                 <div>
                   <span className="mr-2 text-2xl text-gray-300 line-through">
                     69zł
@@ -76,10 +79,16 @@ const Buy = (props: Props) => {
 
               <div className="px-8">
                 <button
-                  onClick={processToCheckout(productPriceID)}
+                  onClick={
+                    userLoggedInAndSubscribted
+                      ? () => router.push("/my-account")
+                      : processToCheckout(productPriceID)
+                  }
                   className="borde inline-block w-full rounded-xl border border-primary bg-primary px-6 py-3 text-xl font-semibold text-primary-DEFAULT_PURPLE_FONT_COLOR transition duration-300 hover:bg-transparent hover:text-primary"
                 >
-                  {showManageSubscription ? "Przejdź do panelu" : "Kup teraz"}
+                  {userLoggedInAndSubscribted
+                    ? "Przejdź do panelu"
+                    : "Kup teraz"}
                 </button>
               </div>
             </div>
