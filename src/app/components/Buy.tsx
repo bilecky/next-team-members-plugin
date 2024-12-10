@@ -29,7 +29,7 @@ const Buy = (props: Props) => {
       setProduct(product);
     };
     fetchData();
-  }, []);
+  }, [user]);
   return (
     <section className="background-mesh-generated-buy">
       <div className="section_wrapper container relative z-10 flex h-screen w-full items-center justify-center py-20 text-center">
@@ -66,7 +66,7 @@ const Buy = (props: Props) => {
                   onClick={
                     userLoggedInAndSubscribted
                       ? () => router.push("/my-account")
-                      : () => redirectToStripeCheckout(productPriceID)
+                      : () => router.push("/login")
                   }
                   className="borde inline-block w-full rounded-xl border border-primary bg-primary px-6 py-3 text-xl font-semibold text-primary-DEFAULT_PURPLE_FONT_COLOR transition duration-300 hover:bg-transparent hover:text-primary"
                 >
