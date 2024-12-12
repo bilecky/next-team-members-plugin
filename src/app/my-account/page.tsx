@@ -1,5 +1,5 @@
 "use client";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useUser } from "../context";
 import { createClient } from "@/utils/supabase/client";
 import { redirectToStripeCheckout } from "@/lib/utils";
@@ -30,9 +30,10 @@ const page = (props: Props) => {
   const supabase = createClient();
   const { user, loading } = useUser();
 
+  console.log("zamontowany");
+
   const userLoggedInAndNotSubscribed = !!user && !user.is_subscribed;
 
-  console.log(user);
   const getPremiumContent = async () => {
     const { data: premiumContent } = await supabase
       .from("premium_content")
@@ -64,9 +65,11 @@ const page = (props: Props) => {
     await redirectToStripeCheckout(productPriceID);
     setLoadingState(false);
   };
-  const buttonClasses =
+  const buyButtonClasses =
     "rounded-xl border border-primary-DEFAULT_PURPLE_BG bg-primary-DEFAULT_PURPLE_BG px-6 py-3 text-center text-xl font-semibold text-primary transition duration-300 hover:bg-primary hover:text-primary-DEFAULT_PURPLE_FONT_COLOR inline-block";
 
+  const downloadButtonClasses =
+    "rounded-xl border border-primary-DEFAULT_PURPLE_BG bg-primary-DEFAULT_PURPLE_BG px-4 py-2 text-center text-lg font-semibold text-primary transition duration-300 hover:bg-primary hover:text-primary-DEFAULT_PURPLE_FONT_COLOR inline-block";
   return (
     <section className="background-mesh-generated-hero h-auto md:h-[110vh]">
       <LoadingOverlay isLoading={loadingState} />
@@ -104,16 +107,16 @@ const page = (props: Props) => {
                 <div className="py-4 text-center">
                   <button
                     onClick={handleLoadingStateAndRedirect}
-                    className="rounded-xl border border-primary-DEFAULT_PURPLE_BG bg-primary-DEFAULT_PURPLE_BG px-6 py-3 text-xl font-semibold text-primary transition duration-300 hover:bg-primary hover:text-primary-DEFAULT_PURPLE_FONT_COLOR"
+                    className={buyButtonClasses}
                   >
                     Kup teraz
                   </button>
                 </div>
               ) : premiumContent && premiumContent.length > 0 ? (
-                <table className="w-full table-auto">
+                <table className="my-4 w-full table-auto">
                   <thead>
                     <tr>
-                      <th className="border px-4 py-2">Wersja</th>
+                      <th className="w-full border px-4 py-2">Wersja</th>
                       <th className="border px-4 py-2">Pobierz</th>
                     </tr>
                   </thead>
@@ -125,7 +128,7 @@ const page = (props: Props) => {
                           <a
                             href={content.download_url}
                             download={content.version + ".zip"}
-                            className="inline-block rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+                            className={downloadButtonClasses}
                           >
                             Pobierz
                           </a>

@@ -38,8 +38,10 @@ export async function login(formData: FormData) {
         return error.message;
     }
   }
+
   revalidatePath("/", "layout");
-  redirect("/");
+
+  return "Zalogowano pomyślnie"; // Stan informujący o sukcesie
 }
 
 export async function signup(formData: FormData) {

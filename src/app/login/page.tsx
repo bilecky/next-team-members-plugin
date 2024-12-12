@@ -9,6 +9,7 @@ import { useUser } from "../context";
 import { redirectToStripeCheckout } from "@/lib/utils";
 import LoadingOverlay from "../common/LoadingOverlay";
 import { set } from "zod";
+import { useRouter } from "next/navigation";
 
 function loginUser(previousState: string | null, formData: FormData) {
   return login(formData);
@@ -23,9 +24,9 @@ export default function LoginPage() {
   const [signupState, signupAction] = useActionState(signupUser, null);
   const [product, setProduct] = useState<Record<string, any> | null>(null);
   const [loadingState, setLoadingState] = useState<boolean>(false);
+  const router = useRouter();
 
   const productPriceID = product?.price.id;
-  console.log(loadingState);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -49,6 +50,12 @@ export default function LoginPage() {
     fetchProduct();
   }, [signupState]);
 
+  useEffect(() => {
+    if (loginState === "Zalogowano pomyślnie") {
+      router.push("/"); // Przekierowanie do strony głównej
+    }
+  }, [loginState]);
+  console.log("login zmaontowany");
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center">
       <LoadingOverlay isLoading={loadingState} />
@@ -96,7 +103,11 @@ export default function LoginPage() {
           </button>
 
           <div className="absolute top-0 text-sm">
-            {loginState && <p className="text-red-500">{loginState}</p>}
+            {loginState && loginState === "Zalogowano pomyślnie" ? (
+              <p className="text-green-500">{loginState}</p>
+            ) : (
+              <p className="text-red-500">{loginState}</p>
+            )}
           </div>
         </div>
       </form>
