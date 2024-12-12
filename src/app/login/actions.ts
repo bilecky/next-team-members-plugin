@@ -31,7 +31,12 @@ export async function login(formData: FormData) {
   );
 
   if (error) {
-    return error.message;
+    switch (error.code) {
+      case "invalid_credentials":
+        return "Podano niepoprawne dane logowania.";
+      default:
+        return error.message;
+    }
   }
   revalidatePath("/", "layout");
   redirect("/");
@@ -59,5 +64,5 @@ export async function signup(formData: FormData) {
         return error.message;
     }
   }
-  return "success";
+  return "Sukces! Za chwilę zostaniesz przekierowany do płatności.";
 }

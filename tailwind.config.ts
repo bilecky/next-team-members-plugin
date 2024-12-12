@@ -48,10 +48,19 @@ export default {
             height: "0",
           },
         },
+        "loadingOverlay-enter": {
+          from: {
+            opacity: "0",
+          },
+          to: {
+            opacity: "1",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "loadingOverlay-enter": "loadingOverlay-enter 0.2s ease-out",
       },
       borderRadius: {
         lg: "var(--radius)",

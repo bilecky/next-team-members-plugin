@@ -7,6 +7,8 @@ import { getProduct } from "@/lib/actions";
 import { loadStripe } from "@stripe/stripe-js";
 import { useUser } from "../context";
 import { redirectToStripeCheckout } from "@/lib/utils";
+import LoadingOverlay from "../common/LoadingOverlay";
+import { set } from "zod";
 
 function loginUser(previousState: string | null, formData: FormData) {
   return login(formData);
@@ -20,18 +22,28 @@ export default function LoginPage() {
   const [loginState, loginAction] = useActionState(loginUser, null);
   const [signupState, signupAction] = useActionState(signupUser, null);
   const [product, setProduct] = useState<Record<string, any> | null>(null);
+  const [loadingState, setLoadingState] = useState<boolean>(false);
 
   const productPriceID = product?.price.id;
+  console.log(loadingState);
 
   useEffect(() => {
     const fetchProduct = async () => {
       const product = await getProduct();
       setProduct(product);
     };
-    if (signupState === "success") {
+
+    const handleLoadingStateAndRedirect = async () => {
+      await redirectToStripeCheckout(productPriceID);
+      setLoadingState(false);
+    };
+    if (
+      signupState === "Sukces! Za chwilę zostaniesz przekierowany do płatności."
+    ) {
+      setLoadingState(true);
       setTimeout(() => {
-        redirectToStripeCheckout(productPriceID);
-      }, 4000);
+        handleLoadingStateAndRedirect();
+      }, 8000);
     }
 
     fetchProduct();
@@ -39,6 +51,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center">
+      <LoadingOverlay isLoading={loadingState} />
       <div className="info p-10 text-center text-sm md:w-2/3 lg:w-1/3">
         <p>
           Jeśli masz już konto, zaloguj się do panelu, gdzie będziesz mógł
@@ -84,7 +97,6 @@ export default function LoginPage() {
 
           <div className="absolute top-0 text-sm">
             {loginState && <p className="text-red-500">{loginState}</p>}
-            {signupState && <p className="text-red-500">{signupState}</p>}
           </div>
         </div>
       </form>

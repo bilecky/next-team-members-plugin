@@ -6,6 +6,7 @@ import { redirectToStripeCheckout } from "@/lib/utils";
 import { getProduct } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { IoMdLogOut } from "react-icons/io";
+import LoadingOverlay from "../common/LoadingOverlay";
 
 type Props = {};
 
@@ -13,18 +14,21 @@ interface PremiumContent {
   id: number;
   created_at: string;
   download_url: string;
+  version: string;
 }
 
 const page = (props: Props) => {
   const [premiumContent, setPremiumContent] = useState<PremiumContent[] | null>(
     null,
   );
+  const [loadingState, setLoadingState] = useState<boolean>(false);
+
   const [product, setProduct] = useState<Record<string, any> | null>(null);
   const productPriceID = product?.price.id;
   const router = useRouter();
 
   const supabase = createClient();
-  const { user } = useUser();
+  const { user, loading } = useUser();
 
   const userLoggedInAndNotSubscribed = !!user && !user.is_subscribed;
 
@@ -55,8 +59,18 @@ const page = (props: Props) => {
     }
   };
 
+  const handleLoadingStateAndRedirect = async () => {
+    setLoadingState(true);
+    await redirectToStripeCheckout(productPriceID);
+    setLoadingState(false);
+  };
+  const buttonClasses =
+    "rounded-xl border border-primary-DEFAULT_PURPLE_BG bg-primary-DEFAULT_PURPLE_BG px-6 py-3 text-center text-xl font-semibold text-primary transition duration-300 hover:bg-primary hover:text-primary-DEFAULT_PURPLE_FONT_COLOR inline-block";
+
   return (
     <section className="background-mesh-generated-hero h-auto md:h-[110vh]">
+      <LoadingOverlay isLoading={loadingState} />
+
       <div className="section_wrapper container relative z-10 flex h-full w-full rounded-xl pb-32 pt-56 text-center">
         <div className="inside_wrapper header-glassmorphism h-full w-full rounded-xl">
           <h2 className="py-8 text-4xl font-semibold">Moje konto</h2>
@@ -71,10 +85,12 @@ const page = (props: Props) => {
               </div>
               <ul className="py-4">
                 <li className="py-1">
-                  <span className="font-semibold">Email:</span> {user?.email}
+                  <span className="font-semibold">Email: </span>
+                  {loading ? " Ładowanie.." : user?.email}
                 </li>
                 <li className="py-1">
-                  <span className="font-semibold">ID:</span> {user?.id}
+                  <span className="font-semibold">ID: </span>{" "}
+                  {loading ? " Ładowanie.." : user?.id}
                 </li>
               </ul>
 
@@ -84,26 +100,43 @@ const page = (props: Props) => {
                 </h2>
                 <div className="h-[2px] w-full rounded-full bg-primary-DARKENED_PURPLE_BG"></div>
               </div>
-
-              <ul className="py-4">
-                {userLoggedInAndNotSubscribed ? (
-                  <li className="py-1 text-center">
-                    <button
-                      onClick={() => redirectToStripeCheckout(productPriceID)}
-                      className="rounded-xl border border-primary-DEFAULT_PURPLE_BG bg-primary-DEFAULT_PURPLE_BG px-6 py-3 text-center text-xl font-semibold text-primary transition duration-300 hover:bg-primary hover:text-primary-DEFAULT_PURPLE_FONT_COLOR"
-                    >
-                      Kup teraz
-                    </button>
-                  </li>
-                ) : (
-                  premiumContent &&
-                  premiumContent.map((content) => (
-                    <li key={content.id} className="py-1">
-                      {content.id} - {content.download_url}
-                    </li>
-                  ))
-                )}
-              </ul>
+              {userLoggedInAndNotSubscribed ? (
+                <div className="py-4 text-center">
+                  <button
+                    onClick={handleLoadingStateAndRedirect}
+                    className="rounded-xl border border-primary-DEFAULT_PURPLE_BG bg-primary-DEFAULT_PURPLE_BG px-6 py-3 text-xl font-semibold text-primary transition duration-300 hover:bg-primary hover:text-primary-DEFAULT_PURPLE_FONT_COLOR"
+                  >
+                    Kup teraz
+                  </button>
+                </div>
+              ) : premiumContent && premiumContent.length > 0 ? (
+                <table className="w-full table-auto">
+                  <thead>
+                    <tr>
+                      <th className="border px-4 py-2">Wersja</th>
+                      <th className="border px-4 py-2">Pobierz</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {premiumContent.map((content) => (
+                      <tr key={content.id}>
+                        <td className="border px-4 py-2">{content.version}</td>
+                        <td className="border px-4 py-2">
+                          <a
+                            href={content.download_url}
+                            download={content.version + ".zip"}
+                            className="inline-block rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+                          >
+                            Pobierz
+                          </a>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <div className="py-4 text-center">Brak danych</div>
+              )}
             </div>
             <div className="section_right h-full p-8">
               <div className="logout_wrapper flex h-full w-full items-end justify-end">
