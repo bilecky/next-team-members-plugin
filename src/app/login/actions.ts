@@ -65,5 +65,7 @@ export async function signup(formData: FormData) {
         return error.message;
     }
   }
+
+  revalidatePath("/", "layout");
   return "Sukces! Za chwilę zostaniesz przekierowany do płatności.";
 }

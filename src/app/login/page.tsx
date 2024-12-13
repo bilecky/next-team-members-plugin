@@ -1,5 +1,5 @@
 "use client";
-import { useActionState, useEffect, useState } from "react";
+import { use, useActionState, useEffect, useState } from "react";
 
 import { login, signup } from "./actions";
 import { getProduct } from "@/lib/actions";
@@ -7,6 +7,7 @@ import { getProduct } from "@/lib/actions";
 import { redirectToStripeCheckout } from "@/lib/utils";
 import LoadingOverlay from "../common/LoadingOverlay";
 import { useRouter } from "next/navigation";
+import { createClient } from "@/utils/supabase/client";
 
 function loginUser(previousState: string | null, formData: FormData) {
   return login(formData);
@@ -22,6 +23,7 @@ export default function LoginPage() {
   const [product, setProduct] = useState<Record<string, any> | null>(null);
   const [loadingState, setLoadingState] = useState<boolean>(false);
   const router = useRouter();
+  const supabase = createClient();
 
   const productPriceID = product?.price.id;
 
@@ -30,7 +32,10 @@ export default function LoginPage() {
       const product = await getProduct();
       setProduct(product);
     };
+    fetchProduct();
+  }, []);
 
+  useEffect(() => {
     const handleLoadingStateAndRedirect = async () => {
       await redirectToStripeCheckout(productPriceID);
       setLoadingState(false);
@@ -38,14 +43,39 @@ export default function LoginPage() {
     if (
       signupState === "Sukces! Za chwilę zostaniesz przekierowany do płatności."
     ) {
+      console.log("signupState osiągnął oczekiwany stan, ustawiam loading...");
       setLoadingState(true);
-      setTimeout(() => {
-        handleLoadingStateAndRedirect();
-      }, 8000);
-    }
 
-    fetchProduct();
-  }, [signupState]);
+      // Faza 2: Subskrypcja Supabase tylko po spełnieniu warunku
+      const channel = supabase
+        .channel("realtime-checking-stripe-customer")
+        .on(
+          "postgres_changes",
+          {
+            event: "UPDATE",
+            schema: "public",
+            table: "profile",
+          },
+          (payload) => {
+            console.log("Otrzymano payload z Supabase:", payload);
+
+            if (payload.new.stripe_customer) {
+              console.log("uzytkownik do stripe zostal dodany");
+              handleLoadingStateAndRedirect();
+            }
+
+            // Przekierowanie do Stripe po wykryciu zmiany
+          },
+        )
+        .subscribe();
+
+      // Cleanup: Usunięcie subskrypcji po odmontowaniu komponentu
+      return () => {
+        console.log("Czyszczenie kanału...");
+        supabase.removeChannel(channel);
+      };
+    }
+  }, [signupState, supabase]);
 
   useEffect(() => {
     if (loginState === "Zalogowano pomyślnie") {
