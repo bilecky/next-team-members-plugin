@@ -30,8 +30,6 @@ const page = (props: Props) => {
   const supabase = createClient();
   const { user, loading } = useUser();
 
-  console.log("zamontowany");
-
   const userLoggedInAndNotSubscribed = !!user && !user.is_subscribed;
 
   const getPremiumContent = async () => {

@@ -5,7 +5,7 @@ type Props = {};
 
 const Overview = (props: Props) => {
   return (
-    <section className="background-mesh-generated-overview">
+    <section id="overview" className="background-mesh-generated-overview">
       <div className="section_wrapper container relative z-10 flex w-full flex-col items-center text-center lg:py-20">
         <div className="text_wrapper">
           <h2 className="px-12 text-5xl font-semibold lg:text-6xl">
@@ -24,10 +24,10 @@ const Overview = (props: Props) => {
         </div>
 
         <div className="cards_wrapper grid gap-y-8">
-          <div className="card bg-primary flex flex-col items-center rounded-xl p-5 shadow-xl md:flex-row">
+          <div className="card flex flex-col items-center rounded-xl bg-primary p-5 shadow-xl md:flex-row">
             <div className="text-wrapper p-8 lg:w-2/5">
               <h2 className="mb-4 text-3xl font-semibold">
-                <span className="text-primary-DEFAULT_PURPLE_FONT_COLOR font-bold">
+                <span className="font-bold text-primary-DEFAULT_PURPLE_FONT_COLOR">
                   #1
                 </span>{" "}
                 Włącz Plugin i odkryj nowe funkcje w panelu Administracyjnym
@@ -52,10 +52,10 @@ const Overview = (props: Props) => {
               />
             </div>
           </div>
-          <div className="card bg-primary flex flex-col items-center rounded-xl border p-5 shadow-xl md:flex-row">
+          <div className="card flex flex-col items-center rounded-xl border bg-primary p-5 shadow-xl md:flex-row">
             <div className="text-wrapper p-8 lg:w-2/5">
               <h2 className="mb-4 text-3xl font-semibold">
-                <span className="text-primary-DEFAULT_PURPLE_FONT_COLOR font-bold">
+                <span className="font-bold text-primary-DEFAULT_PURPLE_FONT_COLOR">
                   #2
                 </span>{" "}
                 Dodaj członka zespołu i personalizuj szczegóły{" "}
@@ -80,10 +80,10 @@ const Overview = (props: Props) => {
               />
             </div>
           </div>
-          <div className="card bg-primary flex flex-col items-center rounded-xl border p-5 shadow-xl md:flex-row">
+          <div className="card flex flex-col items-center rounded-xl border bg-primary p-5 shadow-xl md:flex-row">
             <div className="text-wrapper p-8 lg:w-2/5">
               <h2 className="mb-4 text-3xl font-semibold">
-                <span className="text-primary-DEFAULT_PURPLE_FONT_COLOR font-bold">
+                <span className="font-bold text-primary-DEFAULT_PURPLE_FONT_COLOR">
                   #3
                 </span>{" "}
                 Dodaj blok Team Members w edytorze i dostosuj wygląd{" "}

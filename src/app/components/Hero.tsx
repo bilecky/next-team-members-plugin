@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { useUser } from "../context";
 
 type Props = {};
 
@@ -17,15 +16,18 @@ const Hero = (props: Props) => {
             </span>{" "}
             jak nigdy dotąd
           </h2>
-          <p className="py-10 text-lg text-gray-600 lg:px-64">
+          <p className="px-4 py-10 text-lg text-gray-600 xl:px-64">
             Plugin Team Members to proste i eleganckie rozwiązanie do
             wyświetlania członków Twojego zespołu. Idealny dla firm, organizacji
             non-profit i innych instytucji, umożliwia łatwą integrację z każdą
             stroną Wordpress.
           </p>
-          <button className="mb-14 rounded-xl bg-primary-DEFAULT_PURPLE_BG px-8 py-3 font-normal tracking-wide text-white transition duration-300 hover:bg-primary-DARKENED_PURPLE_BG">
+          <a
+            href="#overview"
+            className="mb-14 inline-block rounded-xl bg-primary-DEFAULT_PURPLE_BG px-8 py-3 font-normal tracking-wide text-white transition duration-300 hover:bg-primary-DARKENED_PURPLE_BG"
+          >
             Dowiedz się więcej
-          </button>
+          </a>
         </div>
         <div className="">
           <Image

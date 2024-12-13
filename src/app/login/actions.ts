@@ -2,7 +2,6 @@
 import { z } from "zod";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 import { createClient } from "@/utils/supabase/server";
 
@@ -41,7 +40,7 @@ export async function login(formData: FormData) {
 
   revalidatePath("/", "layout");
 
-  return "Zalogowano pomyślnie"; // Stan informujący o sukcesie
+  return "Zalogowano pomyślnie";
 }
 
 export async function signup(formData: FormData) {

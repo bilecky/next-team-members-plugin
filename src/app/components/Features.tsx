@@ -5,7 +5,7 @@ type Props = {};
 
 const Features = (props: Props) => {
   return (
-    <section>
+    <section id="features">
       <div className="section_wrapper container relative z-10 flex w-full flex-col items-center py-20 text-center">
         <div className="text_wrapper">
           <h2 className="px-12 text-5xl font-semibold lg:text-6xl">
@@ -18,7 +18,7 @@ const Features = (props: Props) => {
           <div className="features_wrapper flex flex-col items-center justify-between gap-5 pt-20 lg:flex-row">
             <div className="text-section lg:w-2/5">
               <div className="paragraph-wrapper flex items-start p-2 lg:p-4">
-                <span className="leading-1 text-primary-DEFAULT_PURPLE_BG mr-4 text-4xl">
+                <span className="leading-1 mr-4 text-4xl text-primary-DEFAULT_PURPLE_BG">
                   &#x2022;
                 </span>
                 <p className="text-start text-xl leading-relaxed">
@@ -33,7 +33,7 @@ const Features = (props: Props) => {
                 </p>
               </div>
               <div className="paragraph-wrapper flex items-start p-2 lg:p-4">
-                <span className="leading-1 text-primary-DEFAULT_PURPLE_BG mr-4 text-4xl">
+                <span className="leading-1 mr-4 text-4xl text-primary-DEFAULT_PURPLE_BG">
                   &#x2022;
                 </span>
                 <p className="text-start text-xl leading-relaxed">

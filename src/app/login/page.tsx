@@ -1,14 +1,11 @@
 "use client";
-import { FormEvent, use, useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 
 import { login, signup } from "./actions";
-import { createClient } from "@/utils/supabase/client";
 import { getProduct } from "@/lib/actions";
-import { loadStripe } from "@stripe/stripe-js";
-import { useUser } from "../context";
+
 import { redirectToStripeCheckout } from "@/lib/utils";
 import LoadingOverlay from "../common/LoadingOverlay";
-import { set } from "zod";
 import { useRouter } from "next/navigation";
 
 function loginUser(previousState: string | null, formData: FormData) {
@@ -52,10 +49,9 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (loginState === "Zalogowano pomyślnie") {
-      router.push("/"); // Przekierowanie do strony głównej
+      router.push("/");
     }
   }, [loginState]);
-  console.log("login zmaontowany");
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center">
       <LoadingOverlay isLoading={loadingState} />
@@ -107,6 +103,11 @@ export default function LoginPage() {
               <p className="text-green-500">{loginState}</p>
             ) : (
               <p className="text-red-500">{loginState}</p>
+            )}
+            {signupState &&
+            signupState ===
+              "Sukces! Za chwilę zostaniesz przekierowany do płatności." ? null : (
+              <p className="text-red-500">{signupState}</p>
             )}
           </div>
         </div>

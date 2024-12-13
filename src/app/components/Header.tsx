@@ -4,10 +4,15 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { PiUserCircle } from "react-icons/pi";
+import { useUser } from "../context";
 
 type Props = {};
 
 const Header = (props: Props) => {
+  const { user } = useUser();
+
+  const userLoggedInAndSubscribted = !!user && user.is_subscribed;
+
   return (
     <header className="container fixed left-0 right-0 z-50 my-6 w-full">
       <div className="header-glassmorphism flex items-center justify-between rounded-xl px-4 py-3">
@@ -31,13 +36,13 @@ const Header = (props: Props) => {
         <nav className="hidden items-center justify-center space-x-8 text-lg md:flex">
           <a
             href="/#features"
-            className="transition duration-300 hover:bg-primary hover:text-primary-DEFAULT_PURPLE_FONT_COLOR"
+            className="transition duration-300 hover:text-primary-DEFAULT_PURPLE_FONT_COLOR"
           >
             Funkcje
           </a>
           <a
             href="/#faq"
-            className="transition duration-300 hover:bg-primary hover:text-primary-DEFAULT_PURPLE_FONT_COLOR"
+            className="transition duration-300 hover:text-primary-DEFAULT_PURPLE_FONT_COLOR"
           >
             FAQ
           </a>
@@ -51,12 +56,14 @@ const Header = (props: Props) => {
               </span>{" "}
             </div>
           </Link>
-          <Link
-            href="/login"
-            className="inline-block rounded-xl border border-primary-DEFAULT_PURPLE_BG bg-primary-DEFAULT_PURPLE_BG px-6 py-3 text-xl font-semibold text-primary transition duration-300 hover:bg-primary hover:text-primary-DEFAULT_PURPLE_FONT_COLOR"
-          >
-            Kup
-          </Link>
+          {!userLoggedInAndSubscribted && (
+            <Link
+              href="/login"
+              className="inline-block rounded-xl border border-primary-DEFAULT_PURPLE_BG bg-primary-DEFAULT_PURPLE_BG px-6 py-3 text-xl font-semibold text-primary transition duration-300 hover:bg-primary hover:text-primary-DEFAULT_PURPLE_FONT_COLOR"
+            >
+              Kup
+            </Link>
+          )}
         </nav>
         <div className="flex items-center justify-center gap-4 md:hidden">
           <Link href="/my-account">
@@ -66,12 +73,14 @@ const Header = (props: Props) => {
               </span>
             </div>
           </Link>
-          <Link
-            href="/login"
-            className="inline-block rounded-xl bg-primary-DEFAULT_PURPLE_BG px-6 py-3 text-xl font-semibold text-primary transition duration-300 hover:bg-primary hover:text-primary-DEFAULT_PURPLE_FONT_COLOR"
-          >
-            Kup
-          </Link>
+          {!userLoggedInAndSubscribted && (
+            <Link
+              href="/login"
+              className="inline-block rounded-xl bg-primary-DEFAULT_PURPLE_BG px-6 py-3 text-xl font-semibold text-primary transition duration-300 hover:bg-primary hover:text-primary-DEFAULT_PURPLE_FONT_COLOR"
+            >
+              Kup
+            </Link>
+          )}
         </div>
       </div>
     </header>

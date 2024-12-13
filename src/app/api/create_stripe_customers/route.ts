@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createAdminServerClient } from "@/utils/supabase/server";
 
-// Inicjalizacja Stripe poza handlerem, aby zachować singleton
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 const API_KEY = process.env.API_ROUTE_SECRET;
@@ -14,7 +13,6 @@ if (!API_KEY) {
 export async function POST(req: NextRequest) {
   const apiKey = req.nextUrl.searchParams.get("API_ROUTE_SECRET");
 
-  // Porównanie klucza z tym zapisanym w env
   if (!apiKey || apiKey !== API_KEY) {
     return NextResponse.json(
       { error: "Nie jestes autoryzowany aby korzystac z API" },
@@ -24,10 +22,8 @@ export async function POST(req: NextRequest) {
   const supabase = await createAdminServerClient();
 
   try {
-    // Parsowanie danych z żądania
     const response = await req.json();
 
-    // Walidacja danych wejściowych
     if (!response.record.email) {
       return NextResponse.json(
         { error: "Email jest wymagany" },
@@ -35,12 +31,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Tworzenie nowego klienta Stripe
     const customer = await stripe.customers.create({
       email: response.record.email,
     });
 
-    // Zapisywanie identyfikatora klienta w bazie danych
     await supabase
       .from("profile")
       .update({
@@ -48,7 +42,6 @@ export async function POST(req: NextRequest) {
       })
       .eq("id", response.record.id);
 
-    // Zwracanie identyfikatora nowego klienta
     return NextResponse.json(
       { message: "Klient Stripe utworzony pomyślnie", customerId: customer.id },
       { status: 201 },

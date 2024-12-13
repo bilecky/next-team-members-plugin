@@ -2,25 +2,17 @@
 import { getProduct } from "@/lib/actions";
 import React, { useEffect, useState } from "react";
 import { useUser } from "../context";
-import { loadStripe } from "@stripe/stripe-js";
-import { useRouter } from "next/navigation";
-import { redirectToStripeCheckout } from "@/lib/utils";
+import Link from "next/link";
 
 type Props = {};
 
 const Buy = (props: Props) => {
-  const router = useRouter();
-
   const { user } = useUser();
   const [product, setProduct] = useState<Record<string, any> | null>(null);
 
   const itemPrice = product?.price?.unit_amount ?? 0;
 
-  const productPriceID = product?.price.id;
-
   const userLoggedInAndSubscribted = !!user && user.is_subscribed;
-  const userLoggedInAndNotSubscribed = !!user && !user.is_subscribed;
-  //aded type in context to support is_subscribed
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,18 +54,14 @@ const Buy = (props: Props) => {
               )}
 
               <div className="px-8">
-                <button
-                  onClick={
-                    userLoggedInAndSubscribted
-                      ? () => router.push("/my-account")
-                      : () => router.push("/login")
-                  }
+                <Link
+                  href={userLoggedInAndSubscribted ? "/my-account" : "/login"}
                   className="borde inline-block w-full rounded-xl border border-primary bg-primary px-6 py-3 text-xl font-semibold text-primary-DEFAULT_PURPLE_FONT_COLOR transition duration-300 hover:bg-transparent hover:text-primary"
                 >
                   {userLoggedInAndSubscribted
                     ? "Przejdź do panelu"
                     : "Kup teraz"}
-                </button>
+                </Link>
               </div>
             </div>
           </div>
