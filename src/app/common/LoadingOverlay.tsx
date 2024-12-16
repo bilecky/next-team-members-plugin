@@ -6,7 +6,7 @@ type LoadingOverlayProps = {
   isLoading: boolean;
   children?: React.ReactNode;
 };
-const LoadingOverlay = ({ isLoading, children }: LoadingOverlayProps) => {
+const LoadingOverlay = ({ isLoading }: LoadingOverlayProps) => {
   if (!isLoading) {
     return null;
   }
