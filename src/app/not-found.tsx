@@ -7,7 +7,7 @@ const page = (props: Props) => {
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center">
       <div className="info_card flex flex-col rounded-xl bg-white px-10 py-10 shadow-xl">
-        <h2 className="py-8 text-xl font-semibold text-primary-DEFAULT_PURPLE_FONT_COLOR">
+        <h2 className="py-8 text-center text-xl font-semibold text-primary-DEFAULT_PURPLE_FONT_COLOR">
           Nie znaleźliśmy tej strony{" "}
         </h2>
         <Link
