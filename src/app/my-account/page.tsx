@@ -32,7 +32,9 @@ const page = (props: Props) => {
 
   const userLoggedInAndNotSubscribed = !!user && !user.is_subscribed;
 
-  if (!user) return router.push("/login");
+  if (!user) {
+    router.push("/login");
+  }
 
   const getPremiumContent = async () => {
     const { data: premiumContent } = await supabase
