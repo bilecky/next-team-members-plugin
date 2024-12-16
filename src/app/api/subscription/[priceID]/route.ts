@@ -42,8 +42,8 @@ export async function POST(
     line_items: chargeItems,
     mode: "payment",
     payment_method_types: ["card"],
-    success_url: `https://next-team-members-plugin.vercel.app/payment/success`,
-    cancel_url: `https://next-team-members-plugin.vercel.app/payment/cancel`,
+    success_url: `${process.env.CLIENT_URL}/payment/success`,
+    cancel_url: `${process.env.CLIENT_URL}/payment/cancel`,
   });
 
   return NextResponse.json({ id: session.id });
