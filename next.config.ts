@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   /* config options here */
+  pageExtensions: ["ts", "tsx"],
 };
 
 export default nextConfig;
