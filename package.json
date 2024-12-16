@@ -1,6 +1,6 @@
 {
-  "name": "next-team-members-plugin",
-  "version": "0.1.0",
+  "name": "team-members-plugin-webapp",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",

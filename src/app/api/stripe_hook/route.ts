@@ -3,9 +3,9 @@ import Stripe from "stripe";
 import { createAdminServerClient } from "@/utils/supabase/server";
 
 // Inicjalizacja Stripe poza handlerem, aby zachować singleton
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(req: NextRequest) {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
   const signature = req.headers.get("stripe-signature");
   const signingSecret = process.env.STRIPE_SIGNING_SECRET;
   const rawBody = await req.text();

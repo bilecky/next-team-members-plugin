@@ -2,8 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createAdminServerClient } from "@/utils/supabase/server";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-
 const API_KEY = process.env.API_ROUTE_SECRET;
 
 if (!API_KEY) {
@@ -11,6 +9,7 @@ if (!API_KEY) {
 }
 
 export async function POST(req: NextRequest) {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
   const apiKey = req.nextUrl.searchParams.get("API_ROUTE_SECRET");
 
   if (!apiKey || apiKey !== API_KEY) {

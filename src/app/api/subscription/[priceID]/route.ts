@@ -2,12 +2,11 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createClient } from "@/utils/supabase/server";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-
 export async function POST(
   request: Request,
   { params }: { params: Promise<{ priceID: string }> },
 ) {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
   const supabase = await createClient();
 
   const priceID = (await params).priceID;
