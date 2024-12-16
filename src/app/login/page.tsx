@@ -43,7 +43,6 @@ export default function LoginPage() {
     if (
       signupState === "Sukces! Za chwilę zostaniesz przekierowany do płatności."
     ) {
-      console.log("signupState osiągnął oczekiwany stan, ustawiam loading...");
       setLoadingState(true);
 
       // Faza 2: Subskrypcja Supabase tylko po spełnieniu warunku
