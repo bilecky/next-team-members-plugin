@@ -56,10 +56,7 @@ export default function LoginPage() {
             table: "profile",
           },
           (payload) => {
-            console.log("Otrzymano payload z Supabase:", payload);
-
             if (payload.new.stripe_customer) {
-              console.log("uzytkownik do stripe zostal dodany");
               handleLoadingStateAndRedirect();
             }
 
@@ -70,7 +67,6 @@ export default function LoginPage() {
 
       // Cleanup: Usunięcie subskrypcji po odmontowaniu komponentu
       return () => {
-        console.log("Czyszczenie kanału...");
         supabase.removeChannel(channel);
       };
     }
