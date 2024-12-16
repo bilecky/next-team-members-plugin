@@ -1,5 +1,5 @@
 "use client";
-import { use, useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 
 import { login, signup } from "./actions";
 import { getProduct } from "@/lib/actions";
