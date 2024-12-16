@@ -44,10 +44,16 @@ export async function updateSession(request: NextRequest) {
   //   .single();
 
   if (request.nextUrl.pathname.startsWith("/my-account") && !user) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    const url = request.nextUrl.clone();
+    url.pathname = "/login";
+
+    return NextResponse.redirect(url);
   }
   if (request.nextUrl.pathname.startsWith("/login") && user) {
-    return NextResponse.redirect(new URL("/my-account", request.url));
+    const url = request.nextUrl.clone();
+    url.pathname = "/my-account";
+
+    return NextResponse.redirect(url);
   }
   // if (request.nextUrl.pathname.startsWith("/payment") && !checkIfSubscribed) {
   //   return NextResponse.redirect(new URL("/my-account", request.url));
