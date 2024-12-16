@@ -60,7 +60,7 @@ const page = (props: Props) => {
     if (error) {
       console.error("Błąd podczas wylogowywania:", error);
     } else {
-      router.push("/");
+      router.refresh();
     }
   };
 
