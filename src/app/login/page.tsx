@@ -25,11 +25,6 @@ export default function LoginPage() {
   const [loadingState, setLoadingState] = useState<boolean>(false);
   const router = useRouter();
   const supabase = createClient();
-  const { user, loading } = useUser();
-  const userID = user?.id;
-
-  console.log(user);
-  console.log(userID);
 
   const productPriceID = product?.price.id;
 
@@ -42,20 +37,15 @@ export default function LoginPage() {
   }, []);
 
   useEffect(() => {
-    if (loading) return; // Czekaj, aż ładowanie się zakończy
-
     const handleLoadingStateAndRedirect = async () => {
       await redirectToStripeCheckout(productPriceID);
       setLoadingState(false);
     };
 
     const checkStripeCustomerAndSubscribe = async () => {
-      if (!userID) {
-        console.log("Brak userID, przerwanie funkcji.");
-        return;
-      }
-
       setLoadingState(true);
+
+      const userID = (await supabase.auth.getUser()).data.user?.id;
 
       // 1. Pobranie aktualnych danych użytkownika z bazy danych
       const { data, error } = await supabase
@@ -111,7 +101,7 @@ export default function LoginPage() {
     ) {
       checkStripeCustomerAndSubscribe();
     }
-  }, [signupState, supabase, userID, loading]);
+  }, [signupState, supabase]);
 
   useEffect(() => {
     if (loginState === "Zalogowano pomyślnie") {
