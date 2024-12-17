@@ -25,7 +25,7 @@ export default function LoginPage() {
   const [loadingState, setLoadingState] = useState<boolean>(false);
   const router = useRouter();
   const supabase = createClient();
-  const { user } = useUser();
+  const { user, loading } = useUser();
   const userID = user?.id;
 
   console.log(user);
@@ -42,6 +42,8 @@ export default function LoginPage() {
   }, []);
 
   useEffect(() => {
+    if (loading) return; // Czekaj, aż ładowanie się zakończy
+
     const handleLoadingStateAndRedirect = async () => {
       await redirectToStripeCheckout(productPriceID);
       setLoadingState(false);
@@ -52,9 +54,6 @@ export default function LoginPage() {
         console.log("Brak userID, przerwanie funkcji.");
         return;
       }
-
-      setLoadingState(true);
-
       // 1. Pobranie aktualnych danych użytkownika z bazy danych
       const { data, error } = await supabase
         .from("profile")
@@ -70,7 +69,7 @@ export default function LoginPage() {
 
       // 2. Jeśli stripe_customer istnieje, przekieruj od razu
       if (data?.stripe_customer) {
-        console.log("Stripe_customer już istnieje, przekierowanie...");
+        console.log("Stripe_customer juz istnieje, przekierowanie...");
         handleLoadingStateAndRedirect();
       } else {
         // 3. Jeśli stripe_customer nie istnieje, uruchom subskrypcję
@@ -104,13 +103,11 @@ export default function LoginPage() {
     };
 
     if (
-      signupState ===
-        "Sukces! Za chwilę zostaniesz przekierowany do płatności." &&
-      userID // Sprawdź dostępność userID przed wykonaniem
+      signupState === "Sukces! Za chwilę zostaniesz przekierowany do płatności."
     ) {
       checkStripeCustomerAndSubscribe();
     }
-  }, [signupState, supabase, userID]);
+  }, [signupState, supabase, userID, loading]);
 
   useEffect(() => {
     if (loginState === "Zalogowano pomyślnie") {
