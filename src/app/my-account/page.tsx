@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useUser } from "../context";
+import { extendedUser, useUser } from "../context";
 import { createClient } from "@/utils/supabase/client";
 import { redirectToStripeCheckout } from "@/lib/utils";
 import { getProduct, handleLogoutServerAction } from "@/lib/actions";
@@ -27,9 +27,11 @@ const page = (props: Props) => {
   const productPriceID = product?.price.id;
 
   const supabase = createClient();
-  const { user, loading, getUserProfile } = useUser();
+  const { user, loading } = useUser();
 
   const userLoggedInAndNotSubscribed = !!user && !user.is_subscribed;
+
+  const [currentUser, setCurrentUser] = useState<extendedUser | null>(null);
 
   // useEffect(() => {
   //   if (!user && !loading) {
@@ -43,9 +45,13 @@ const page = (props: Props) => {
       .select("*");
     setPremiumContent(premiumContent);
   };
+  const getCurrentUser = async () => {
+    const { data } = await supabase.auth.getUser();
+    setCurrentUser(data.user);
+  };
 
   useEffect(() => {
-    getUserProfile();
+    getCurrentUser();
     getPremiumContent();
     const fetchData = async () => {
       const product = await getProduct();
@@ -89,11 +95,11 @@ const page = (props: Props) => {
               <ul className="py-4">
                 <li className="py-1">
                   <span className="font-semibold">Email: </span>
-                  {loading ? " Ładowanie.." : user?.email}
+                  {loading ? " Ładowanie.." : currentUser?.email}
                 </li>
                 <li className="py-1">
                   <span className="font-semibold">ID: </span>{" "}
-                  {loading ? " Ładowanie.." : user?.id}
+                  {loading ? " Ładowanie.." : currentUser?.id}
                 </li>
               </ul>
 

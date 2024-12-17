@@ -3,20 +3,17 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { usePathname } from "next/navigation";
-import { get } from "http";
 
-interface extendedUser extends User {
+export interface extendedUser extends User {
   is_subscribed?: boolean;
 }
 
 export const UserContext = createContext<{
   user: extendedUser | null;
   loading: boolean;
-  getUserProfile: () => Promise<void>;
 }>({
   user: null,
   loading: true,
-  getUserProfile: async () => {},
 });
 
 const Provider = ({ children }: Readonly<{ children: React.ReactNode }>) => {
@@ -24,33 +21,32 @@ const Provider = ({ children }: Readonly<{ children: React.ReactNode }>) => {
   const pathname = usePathname();
 
   const [user, setUser] = useState<extendedUser | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  const getUserProfile = async () => {
-    const {
-      data: { user: sessionUser },
-    } = await supabase.auth.getUser();
-
-    if (sessionUser) {
-      const { data: profile } = await supabase
-        .from("profile")
-        .select("*")
-        .eq("id", sessionUser.id)
-        .single();
-
-      setUser({
-        ...sessionUser,
-        ...profile,
-      });
-    } else {
-      setUser(null);
-    }
-
-    setLoading(false); // Zakończono ładowanie
-  };
-  // Dodanie stanu loading
+  const [loading, setLoading] = useState<boolean>(true); // Dodanie stanu loading
 
   useEffect(() => {
+    const getUserProfile = async () => {
+      const {
+        data: { user: sessionUser },
+      } = await supabase.auth.getUser();
+
+      if (sessionUser) {
+        const { data: profile } = await supabase
+          .from("profile")
+          .select("*")
+          .eq("id", sessionUser.id)
+          .single();
+
+        setUser({
+          ...sessionUser,
+          ...profile,
+        });
+      } else {
+        setUser(null);
+      }
+
+      setLoading(false); // Zakończono ładowanie
+    };
+
     // Listener na zmiany stanu autoryzacji
     const { data: listener } = supabase.auth.onAuthStateChange(() => {
       getUserProfile();
@@ -66,9 +62,7 @@ const Provider = ({ children }: Readonly<{ children: React.ReactNode }>) => {
   }, [supabase, pathname]);
 
   return (
-    <UserContext.Provider
-      value={{ user: user, loading: loading, getUserProfile: getUserProfile }}
-    >
+    <UserContext.Provider value={{ user: user, loading: loading }}>
       {children}
     </UserContext.Provider>
   );
