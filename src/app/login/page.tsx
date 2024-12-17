@@ -8,6 +8,7 @@ import { redirectToStripeCheckout } from "@/lib/utils";
 import LoadingOverlay from "../common/LoadingOverlay";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
+import { useUser } from "../context";
 
 function loginUser(previousState: string | null, formData: FormData) {
   return login(formData);
@@ -24,6 +25,11 @@ export default function LoginPage() {
   const [loadingState, setLoadingState] = useState<boolean>(false);
   const router = useRouter();
   const supabase = createClient();
+  const { user } = useUser();
+  const userID = user?.id;
+
+  console.log(user);
+  console.log(userID);
 
   const productPriceID = product?.price.id;
 
@@ -40,35 +46,61 @@ export default function LoginPage() {
       await redirectToStripeCheckout(productPriceID);
       setLoadingState(false);
     };
+
+    const checkStripeCustomerAndSubscribe = async () => {
+      setLoadingState(true);
+
+      // 1. Pobranie aktualnych danych użytkownika z bazy danych
+      const { data, error } = await supabase
+        .from("profile")
+        .select("stripe_customer")
+        .eq("id", userID) // upewnij się, że masz dostęp do userID
+        .single();
+
+      if (error) {
+        console.error("Błąd podczas sprawdzania stripe_customer:", error);
+        setLoadingState(false);
+        return;
+      }
+
+      // 2. Jeśli stripe_customer istnieje, przekieruj od razu
+      if (data?.stripe_customer) {
+        console.log("Stripe_customer już istnieje, przekierowanie...");
+        handleLoadingStateAndRedirect();
+      } else {
+        // 3. Jeśli stripe_customer nie istnieje, uruchom subskrypcję
+        console.log("Stripe_customer nie istnieje, uruchamiam subskrypcję...");
+
+        const channel = supabase
+          .channel("realtime-checking-stripe-customer")
+          .on(
+            "postgres_changes",
+            {
+              event: "UPDATE",
+              schema: "public",
+              table: "profile",
+            },
+            (payload) => {
+              console.log("Otrzymano zmianę z Supabase:", payload);
+              if (payload.new?.stripe_customer) {
+                handleLoadingStateAndRedirect();
+              }
+            },
+          )
+          .subscribe();
+
+        // 4. Cleanup subskrypcji po odmontowaniu komponentu
+        return () => {
+          supabase.removeChannel(channel);
+          console.log("Subskrypcja usunięta.");
+        };
+      }
+    };
+
     if (
       signupState === "Sukces! Za chwilę zostaniesz przekierowany do płatności."
     ) {
-      setLoadingState(true);
-
-      // Faza 2: Subskrypcja Supabase tylko po spełnieniu warunku
-      const channel = supabase
-        .channel("realtime-checking-stripe-customer")
-        .on(
-          "postgres_changes",
-          {
-            event: "UPDATE",
-            schema: "public",
-            table: "profile",
-          },
-          (payload) => {
-            if (payload.new.stripe_customer) {
-              handleLoadingStateAndRedirect();
-            }
-
-            // Przekierowanie do Stripe po wykryciu zmiany
-          },
-        )
-        .subscribe();
-
-      // Cleanup: Usunięcie subskrypcji po odmontowaniu komponentu
-      return () => {
-        supabase.removeChannel(channel);
-      };
+      checkStripeCustomerAndSubscribe();
     }
   }, [signupState, supabase]);
 
