@@ -47,6 +47,8 @@ export default function LoginPage() {
 
       const userID = (await supabase.auth.getUser()).data.user?.id;
 
+      console.log("userID", userID);
+
       // 1. Pobranie aktualnych danych użytkownika z bazy danych
       const { data, error } = await supabase
         .from("profile")
