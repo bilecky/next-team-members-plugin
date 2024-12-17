@@ -48,13 +48,18 @@ export default function LoginPage() {
     };
 
     const checkStripeCustomerAndSubscribe = async () => {
+      if (!userID) {
+        console.log("Brak userID, przerwanie funkcji.");
+        return;
+      }
+
       setLoadingState(true);
 
       // 1. Pobranie aktualnych danych użytkownika z bazy danych
       const { data, error } = await supabase
         .from("profile")
         .select("stripe_customer")
-        .eq("id", userID) // upewnij się, że masz dostęp do userID
+        .eq("id", userID)
         .single();
 
       if (error) {
@@ -79,6 +84,7 @@ export default function LoginPage() {
               event: "UPDATE",
               schema: "public",
               table: "profile",
+              filter: `id=eq.${userID}`,
             },
             (payload) => {
               console.log("Otrzymano zmianę z Supabase:", payload);
@@ -89,7 +95,7 @@ export default function LoginPage() {
           )
           .subscribe();
 
-        // 4. Cleanup subskrypcji po odmontowaniu komponentu
+        // Cleanup subskrypcji po odmontowaniu komponentu
         return () => {
           supabase.removeChannel(channel);
           console.log("Subskrypcja usunięta.");
@@ -98,11 +104,13 @@ export default function LoginPage() {
     };
 
     if (
-      signupState === "Sukces! Za chwilę zostaniesz przekierowany do płatności."
+      signupState ===
+        "Sukces! Za chwilę zostaniesz przekierowany do płatności." &&
+      userID // Sprawdź dostępność userID przed wykonaniem
     ) {
       checkStripeCustomerAndSubscribe();
     }
-  }, [signupState, supabase]);
+  }, [signupState, supabase, userID]);
 
   useEffect(() => {
     if (loginState === "Zalogowano pomyślnie") {
