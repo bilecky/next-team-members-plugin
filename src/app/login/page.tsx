@@ -54,6 +54,9 @@ export default function LoginPage() {
         console.log("Brak userID, przerwanie funkcji.");
         return;
       }
+
+      setLoadingState(true);
+
       // 1. Pobranie aktualnych danych użytkownika z bazy danych
       const { data, error } = await supabase
         .from("profile")
