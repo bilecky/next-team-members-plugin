@@ -46,7 +46,6 @@ const Provider = ({ children }: Readonly<{ children: React.ReactNode }>) => {
 
       setLoading(false); // Zakończono ładowanie
     };
-    supabase.auth.onAuthStateChange(() => getUserProfile());
 
     getUserProfile();
   }, [supabase, pathname]);
