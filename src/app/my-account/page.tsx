@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useUser } from "../context";
 import { createClient } from "@/utils/supabase/client";
 import { redirectToStripeCheckout } from "@/lib/utils";
-import { getProduct } from "@/lib/actions";
+import { getProduct, handleLogoutServerAction } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { IoMdLogOut } from "react-icons/io";
 import LoadingOverlay from "../common/LoadingOverlay";
@@ -55,20 +55,16 @@ const page = (props: Props) => {
     fetchData();
   }, []);
 
-  const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      console.error("Błąd podczas wylogowywania:", error);
-    } else {
-      router.refresh();
-    }
-  };
-
   const handleLoadingStateAndRedirect = async () => {
     setLoadingState(true);
     await redirectToStripeCheckout(productPriceID);
     setLoadingState(false);
   };
+
+  const handleLogout = () => {
+    handleLogoutServerAction();
+  };
+
   const buyButtonClasses =
     "rounded-xl border border-primary-DEFAULT_PURPLE_BG bg-primary-DEFAULT_PURPLE_BG px-6 py-3 text-center text-xl font-semibold text-primary transition duration-300 hover:bg-primary hover:text-primary-DEFAULT_PURPLE_FONT_COLOR inline-block";
 
