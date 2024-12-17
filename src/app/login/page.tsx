@@ -41,44 +41,6 @@ export default function LoginPage() {
       await redirectToStripeCheckout(productPriceID);
       setLoadingState(false);
     };
-
-    const checkStripeCustomerAndSubscribe = async () => {
-      setLoadingState(true);
-
-      const userID = (await supabase.auth.getUser()).data.user?.id;
-
-      const MAX_RETRIES = 5;
-      const BASE_DELAY = 500; // ms
-
-      for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
-        const { data, error } = await supabase
-          .from("profile")
-          .select("stripe_customer")
-          .eq("id", userID)
-          .single();
-
-        if (data?.stripe_customer) {
-          console.log("Stripe_customer znaleziony!");
-          handleLoadingStateAndRedirect();
-          return;
-        }
-
-        if (error) {
-          console.error("Błąd podczas sprawdzania stripe_customer:", error);
-          setLoadingState(false);
-          return;
-        }
-
-        // Exponential backoff - zwiększamy czas oczekiwania między próbami
-        const delay = BASE_DELAY * Math.pow(2, attempt);
-        await new Promise((resolve) => setTimeout(resolve, delay));
-      }
-
-      // Jeśli po MAX_RETRIES nie znajdziemy stripe_customer
-      console.error("Nie udało się znaleźć stripe_customer");
-      setLoadingState(false);
-    };
-
     const channel = supabase
       .channel("realtime-checking-stripe-customer")
       .on(
@@ -89,7 +51,8 @@ export default function LoginPage() {
           table: "profile",
         },
         (payload) => {
-          console.log("Otrzymano zmianę z Supabase:", payload);
+          let changeNumber = 0;
+          console.log(`otrzymano zmianę nr ${changeNumber++}`, payload);
           if (payload.new?.stripe_customer) {
             handleLoadingStateAndRedirect();
           }
@@ -100,7 +63,7 @@ export default function LoginPage() {
     if (
       signupState === "Sukces! Za chwilę zostaniesz przekierowany do płatności."
     ) {
-      checkStripeCustomerAndSubscribe();
+      setLoadingState(true);
     }
 
     // Cleanup subskrypcji po odmontowaniu komponentu
