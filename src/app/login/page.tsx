@@ -77,7 +77,6 @@ export default function LoginPage() {
               event: "UPDATE",
               schema: "public",
               table: "profile",
-              filter: `id=eq.${userID}`,
             },
             (payload) => {
               console.log("Otrzymano zmianę z Supabase:", payload);
