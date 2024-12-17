@@ -47,7 +47,17 @@ const Provider = ({ children }: Readonly<{ children: React.ReactNode }>) => {
       setLoading(false); // Zakończono ładowanie
     };
 
+    const { data: listener } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_IN" || event === "SIGNED_OUT") {
+        getUserProfile(); // Odśwież dane użytkownika
+      }
+    });
+
     getUserProfile();
+
+    return () => {
+      listener.subscription.unsubscribe(); // Czyszczenie listenera
+    };
   }, [supabase, pathname]);
 
   return (
