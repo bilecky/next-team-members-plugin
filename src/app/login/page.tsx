@@ -69,6 +69,7 @@ export default function LoginPage() {
         setLoadingState(false);
         return;
       }
+      console.log("udalo sie pobrac data z supabase", data);
 
       // 2. Jeśli stripe_customer istnieje, przekieruj od razu
       if (data?.stripe_customer) {
