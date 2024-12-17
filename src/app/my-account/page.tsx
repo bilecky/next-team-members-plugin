@@ -25,10 +25,9 @@ const page = (props: Props) => {
 
   const [product, setProduct] = useState<Record<string, any> | null>(null);
   const productPriceID = product?.price.id;
-  const router = useRouter();
 
   const supabase = createClient();
-  const { user, loading } = useUser();
+  const { user, loading, getUserProfile } = useUser();
 
   const userLoggedInAndNotSubscribed = !!user && !user.is_subscribed;
 
@@ -46,6 +45,7 @@ const page = (props: Props) => {
   };
 
   useEffect(() => {
+    getUserProfile();
     getPremiumContent();
     const fetchData = async () => {
       const product = await getProduct();
