@@ -47,61 +47,67 @@ export default function LoginPage() {
 
       const userID = (await supabase.auth.getUser()).data.user?.id;
 
-      console.log("userID", userID);
+      const MAX_RETRIES = 5;
+      const BASE_DELAY = 500; // ms
 
-      // 1. Pobranie aktualnych danych użytkownika z bazy danych
-      const { data, error } = await supabase
-        .from("profile")
-        .select("stripe_customer")
-        .eq("id", userID)
-        .single();
+      for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+        const { data, error } = await supabase
+          .from("profile")
+          .select("stripe_customer")
+          .eq("id", userID)
+          .single();
 
-      if (error) {
-        console.error("Błąd podczas sprawdzania stripe_customer:", error);
-        setLoadingState(false);
-        return;
+        if (data?.stripe_customer) {
+          console.log("Stripe_customer znaleziony!");
+          handleLoadingStateAndRedirect();
+          return;
+        }
+
+        if (error) {
+          console.error("Błąd podczas sprawdzania stripe_customer:", error);
+          setLoadingState(false);
+          return;
+        }
+
+        // Exponential backoff - zwiększamy czas oczekiwania między próbami
+        const delay = BASE_DELAY * Math.pow(2, attempt);
+        await new Promise((resolve) => setTimeout(resolve, delay));
       }
-      console.log("udalo sie pobrac data z supabase", data);
 
-      // 2. Jeśli stripe_customer istnieje, przekieruj od razu
-      if (data?.stripe_customer) {
-        console.log("Stripe_customer juz istnieje, przekierowanie...");
-        handleLoadingStateAndRedirect();
-      } else {
-        // 3. Jeśli stripe_customer nie istnieje, uruchom subskrypcję
-        console.log("Stripe_customer nie istnieje, uruchamiam subskrypcję...");
-
-        const channel = supabase
-          .channel("realtime-checking-stripe-customer")
-          .on(
-            "postgres_changes",
-            {
-              event: "UPDATE",
-              schema: "public",
-              table: "profile",
-            },
-            (payload) => {
-              console.log("Otrzymano zmianę z Supabase:", payload);
-              if (payload.new?.stripe_customer) {
-                handleLoadingStateAndRedirect();
-              }
-            },
-          )
-          .subscribe();
-
-        // Cleanup subskrypcji po odmontowaniu komponentu
-        return () => {
-          supabase.removeChannel(channel);
-          console.log("Subskrypcja usunięta.");
-        };
-      }
+      // Jeśli po MAX_RETRIES nie znajdziemy stripe_customer
+      console.error("Nie udało się znaleźć stripe_customer");
+      setLoadingState(false);
     };
+
+    const channel = supabase
+      .channel("realtime-checking-stripe-customer")
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "profile",
+        },
+        (payload) => {
+          console.log("Otrzymano zmianę z Supabase:", payload);
+          if (payload.new?.stripe_customer) {
+            handleLoadingStateAndRedirect();
+          }
+        },
+      )
+      .subscribe();
 
     if (
       signupState === "Sukces! Za chwilę zostaniesz przekierowany do płatności."
     ) {
       checkStripeCustomerAndSubscribe();
     }
+
+    // Cleanup subskrypcji po odmontowaniu komponentu
+    return () => {
+      supabase.removeChannel(channel);
+      console.log("Subskrypcja usunięta.");
+    };
   }, [signupState, supabase]);
 
   useEffect(() => {
