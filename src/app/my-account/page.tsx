@@ -3,11 +3,11 @@ import React, { useEffect, useState } from "react";
 import { useUser } from "../context";
 import { createClient } from "@/utils/supabase/client";
 import { redirectToStripeCheckout } from "@/lib/utils";
-import { getProduct, handleLogoutServerAction } from "@/lib/actions";
+import { getProduct } from "@/lib/actions";
 import { IoMdLogOut } from "react-icons/io";
 import LoadingOverlay from "../common/LoadingOverlay";
 import { usePathname } from "next/navigation";
-import router from "next/router";
+import { useRouter } from "next/navigation";
 
 type Props = {};
 
