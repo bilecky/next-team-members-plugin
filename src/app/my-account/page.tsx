@@ -6,6 +6,7 @@ import { redirectToStripeCheckout } from "@/lib/utils";
 import { getProduct, handleLogoutServerAction } from "@/lib/actions";
 import { IoMdLogOut } from "react-icons/io";
 import LoadingOverlay from "../common/LoadingOverlay";
+import { usePathname } from "next/navigation";
 
 type Props = {};
 
@@ -20,6 +21,8 @@ const page = (props: Props) => {
   const [premiumContent, setPremiumContent] = useState<PremiumContent[] | null>(
     null,
   );
+  const pathname = usePathname();
+
   const [loadingState, setLoadingState] = useState<boolean>(false);
 
   const [product, setProduct] = useState<Record<string, any> | null>(null);
@@ -69,7 +72,10 @@ const page = (props: Props) => {
   const downloadButtonClasses =
     "rounded-xl border border-primary-DEFAULT_PURPLE_BG bg-primary-DEFAULT_PURPLE_BG px-4 py-2 text-center text-lg font-semibold text-primary transition duration-300 hover:bg-primary hover:text-primary-DEFAULT_PURPLE_FONT_COLOR inline-block";
   return (
-    <section className="background-mesh-generated-hero h-auto md:h-[110vh]">
+    <section
+      key={pathname}
+      className="background-mesh-generated-hero h-auto md:h-[110vh]"
+    >
       <LoadingOverlay isLoading={loadingState} />
 
       <div className="section_wrapper container relative z-10 flex h-full w-full rounded-xl pb-32 pt-56 text-center">
