@@ -4,7 +4,6 @@ import { useUser } from "../context";
 import { createClient } from "@/utils/supabase/client";
 import { redirectToStripeCheckout } from "@/lib/utils";
 import { getProduct, handleLogoutServerAction } from "@/lib/actions";
-import { useRouter } from "next/navigation";
 import { IoMdLogOut } from "react-icons/io";
 import LoadingOverlay from "../common/LoadingOverlay";
 
@@ -23,11 +22,13 @@ const page = (props: Props) => {
   );
   const [loadingState, setLoadingState] = useState<boolean>(false);
 
+  const [isUserSync, setIsUserSync] = useState<boolean>(false);
+
   const [product, setProduct] = useState<Record<string, any> | null>(null);
   const productPriceID = product?.price.id;
 
   const supabase = createClient();
-  const { user, loading } = useUser();
+  const { user, loading, getUserProfile } = useUser();
 
   const userLoggedInAndNotSubscribed = !!user && !user.is_subscribed;
 
@@ -53,6 +54,24 @@ const page = (props: Props) => {
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const syncUser = async () => {
+      if (!user) return;
+      if (isUserSync) return;
+
+      const {
+        data: { user: sessionUser },
+      } = await supabase.auth.getUser();
+      if (sessionUser?.id !== user?.id) {
+        // Wywołanie getUser() spowoduje ponowne pobranie danych przez Provider i odświeżenie kontekstu
+        await getUserProfile();
+      }
+      setIsUserSync(true);
+    };
+
+    syncUser();
+  }, [user, supabase, isUserSync]);
 
   const handleLoadingStateAndRedirect = async () => {
     setLoadingState(true);
@@ -161,3 +180,6 @@ const page = (props: Props) => {
 };
 
 export default page;
+function getUserProfile() {
+  throw new Error("Function not implemented.");
+}
