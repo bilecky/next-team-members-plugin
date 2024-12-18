@@ -22,13 +22,11 @@ const page = (props: Props) => {
   );
   const [loadingState, setLoadingState] = useState<boolean>(false);
 
-  const [isUserSync, setIsUserSync] = useState<boolean>(false);
-
   const [product, setProduct] = useState<Record<string, any> | null>(null);
   const productPriceID = product?.price.id;
 
   const supabase = createClient();
-  const { user, loading, getUserProfile } = useUser();
+  const { user, loading } = useUser();
 
   const userLoggedInAndNotSubscribed = !!user && !user.is_subscribed;
 
@@ -54,24 +52,6 @@ const page = (props: Props) => {
     };
     fetchData();
   }, []);
-
-  useEffect(() => {
-    const syncUser = async () => {
-      if (!user) return;
-      if (isUserSync) return;
-
-      const {
-        data: { user: sessionUser },
-      } = await supabase.auth.getUser();
-      if (sessionUser?.id !== user?.id) {
-        // Wywołanie getUser() spowoduje ponowne pobranie danych przez Provider i odświeżenie kontekstu
-        await getUserProfile();
-      }
-      setIsUserSync(true);
-    };
-
-    syncUser();
-  }, [user, supabase, isUserSync]);
 
   const handleLoadingStateAndRedirect = async () => {
     setLoadingState(true);
