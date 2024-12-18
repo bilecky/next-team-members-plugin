@@ -52,7 +52,6 @@ export default function LoginPage() {
         },
         (payload) => {
           let changeNumber = 0;
-          console.log(`otrzymano zmianę nr ${changeNumber++}`, payload);
           if (payload.new?.stripe_customer) {
             handleLoadingStateAndRedirect();
           }
@@ -69,7 +68,6 @@ export default function LoginPage() {
     // Cleanup subskrypcji po odmontowaniu komponentu
     return () => {
       supabase.removeChannel(channel);
-      console.log("Subskrypcja usunięta.");
     };
   }, [signupState, supabase]);
 
