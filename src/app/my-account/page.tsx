@@ -7,6 +7,7 @@ import { getProduct, handleLogoutServerAction } from "@/lib/actions";
 import { IoMdLogOut } from "react-icons/io";
 import LoadingOverlay from "../common/LoadingOverlay";
 import { usePathname } from "next/navigation";
+import router from "next/router";
 
 type Props = {};
 
@@ -22,6 +23,7 @@ const page = (props: Props) => {
     null,
   );
   const pathname = usePathname();
+  const router = useRouter();
 
   const [loadingState, setLoadingState] = useState<boolean>(false);
 
@@ -62,8 +64,13 @@ const page = (props: Props) => {
     setLoadingState(false);
   };
 
-  const handleLogout = () => {
-    handleLogoutServerAction();
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error("Błąd podczas wylogowywania:", error);
+    } else {
+      router.refresh();
+    }
   };
 
   const buyButtonClasses =
