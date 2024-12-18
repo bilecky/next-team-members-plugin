@@ -18,8 +18,8 @@ const Overview = (props: Props) => {
           <p className="py-10 text-lg text-gray-600 lg:px-64">
             Wdrożenie Team Members Plugin to dosłownie kilka kliknięć. Po
             aktywacji pluginu, wystarczy, że dodasz nowego członka w panelu, a
-            następnie w edytorze blokowym Wordpress dodasz blok - Plugin Team
-            Members
+            następnie w edytorze blokowym Wordpress wybierzesz blok - Plugin
+            Team Members
           </p>
         </div>
 

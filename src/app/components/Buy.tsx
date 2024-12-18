@@ -25,7 +25,7 @@ const Buy = (props: Props) => {
   return (
     <section className="background-mesh-generated-buy">
       <div className="section_wrapper container relative z-10 flex h-screen w-full items-center justify-center py-20 text-center">
-        <div className="buy_card-wrapper max-w-xl rounded-xl bg-white p-10 shadow-lg">
+        <div className="buy_card-wrapper max-w-xl rounded-xl bg-white p-10 shadow-xl">
           <div className="flex flex-col items-center">
             <div className="text_wrapper lg:px-12">
               <h2 className="text-4xl font-semibold">

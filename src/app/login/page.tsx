@@ -77,9 +77,9 @@ export default function LoginPage() {
     }
   }, [loginState]);
   return (
-    <div className="flex h-screen w-full flex-col items-center justify-center">
+    <div className="container flex h-screen w-full flex-col items-center justify-center">
       <LoadingOverlay isLoading={loadingState} />
-      <div className="info p-10 text-center text-sm md:w-2/3 lg:w-1/3">
+      <div className="info p-6 text-center text-sm md:w-2/3 md:p-10 lg:w-1/3">
         <p>
           Jeśli masz już konto, zaloguj się do panelu, gdzie będziesz mógł
           pobrać plugin. Jeśli nie masz jeszcze konta, zarejestruj się, a
@@ -87,7 +87,7 @@ export default function LoginPage() {
           pobrać plugin w panelu - "Moje konto".
         </p>
       </div>
-      <form className="flex flex-col gap-4 rounded-xl bg-white px-10 py-10 shadow-xl">
+      <form className="flex flex-col gap-4 rounded-xl bg-white p-6 shadow-xl md:p-10">
         <label className="text-md font-normal" htmlFor="email">
           Email:
         </label>
