@@ -61,7 +61,7 @@ const Header = (props: Props) => {
               href="/login"
               className="inline-block rounded-xl border border-primary-DEFAULT_PURPLE_BG bg-primary-DEFAULT_PURPLE_BG px-6 py-3 text-xl font-semibold text-primary transition duration-300 hover:bg-primary hover:text-primary-DEFAULT_PURPLE_FONT_COLOR"
             >
-              Kup
+              Kup teraz
             </Link>
           )}
         </nav>
